@@ -1,0 +1,31 @@
+README.md
+  s_086e95251eec37::t_6791aa8f43e5c6 16-20,33
+config.schema.json
+  s_086e95251eec37::t_5bb36d2e33eb30 34-41
+src/accessories/simple.ts
+  s_086e95251eec37::t_f4faab81af3a22 90-109
+src/accessories/thermostats.ts
+  s_086e95251eec37::t_dbf70b5687b64c 51,56,112,124-128
+src/easynet/client.ts
+  s_086e95251eec37::t_fc664a33d73c75 32-33,146,160
+src/easynet/registers.ts
+  s_086e95251eec37::t_bb4d1159882993 43-44,61-88,109-114,130,134-136,146-158
+src/platform.ts
+  s_086e95251eec37::t_f7b050042b5db5 10-16,19,28-29,33,35-61,120-122,133
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.6",
+  "base_commit_sha": "f00788782c8f35d09bd1bee1acf42c97b289a884",
+  "prompts": {},
+  "sessions": {
+    "s_086e95251eec37": {
+      "agent_id": {
+        "tool": "github-copilot-cli",
+        "id": "5d6f0941-56a7-4d49-a990-6c10e3ed31ba",
+        "model": "unknown"
+      },
+      "human_author": "Martín Calvete Iglesias <martinci@servicioexterno.inditex.com>"
+    }
+  }
+}
