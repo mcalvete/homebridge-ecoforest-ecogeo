@@ -1,0 +1,23 @@
+README.md
+  s_086e95251eec37::t_1c5c633aaa67f6 13
+src/accessories/simple.ts
+  s_086e95251eec37::t_0b38d91bd4b76c 109-115,117-119,121-122,124,128-133,135-156,160
+src/platform.ts
+  s_086e95251eec37::t_a65abda1cabebf 14,20,81
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.6",
+  "base_commit_sha": "c092867db84bb2c0380fa0017641188d9cf8f191",
+  "prompts": {},
+  "sessions": {
+    "s_086e95251eec37": {
+      "agent_id": {
+        "tool": "github-copilot-cli",
+        "id": "5d6f0941-56a7-4d49-a990-6c10e3ed31ba",
+        "model": "unknown"
+      },
+      "human_author": "Martín Calvete Iglesias <martinci@servicioexterno.inditex.com>"
+    }
+  }
+}
