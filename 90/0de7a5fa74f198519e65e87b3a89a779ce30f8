@@ -1,0 +1,25 @@
+README.md
+  s_086e95251eec37::t_b9a25502579b8e 20,34,36,83
+src/accessories/eve.ts
+  s_086e95251eec37::t_08172bab4a0485 9-10,38-52,68
+src/easynet/registers.ts
+  s_086e95251eec37::t_b12c1c077401e5 47-50,119-163,185-186,204-205,214,217,247-250
+src/platform.ts
+  s_086e95251eec37::t_50424c143ddf20 69-78
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.6",
+  "base_commit_sha": "900de7a5fa74f198519e65e87b3a89a779ce30f8",
+  "prompts": {},
+  "sessions": {
+    "s_086e95251eec37": {
+      "agent_id": {
+        "tool": "github-copilot-cli",
+        "id": "5d6f0941-56a7-4d49-a990-6c10e3ed31ba",
+        "model": "unknown"
+      },
+      "human_author": "Martín Calvete Iglesias <martinci@servicioexterno.inditex.com>"
+    }
+  }
+}
