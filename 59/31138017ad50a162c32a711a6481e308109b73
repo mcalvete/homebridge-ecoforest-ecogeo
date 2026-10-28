@@ -1,0 +1,19 @@
+src/accessories/thermostats.ts
+  s_086e95251eec37::t_6fee9c0d1bd5ab 7-10,12,18-28,30-34,39,43-45,49
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.6",
+  "base_commit_sha": "5931138017ad50a162c32a711a6481e308109b73",
+  "prompts": {},
+  "sessions": {
+    "s_086e95251eec37": {
+      "agent_id": {
+        "tool": "github-copilot-cli",
+        "id": "5d6f0941-56a7-4d49-a990-6c10e3ed31ba",
+        "model": "unknown"
+      },
+      "human_author": "Martín Calvete Iglesias <martinci@servicioexterno.inditex.com>"
+    }
+  }
+}
