@@ -1,0 +1,41 @@
+src/easynet/client.ts
+  s_086e95251eec37::t_57b77a5a3caa1c 1-159
+src/easynet/registers.ts
+  s_086e95251eec37::t_8471e3f194eb78 1-73
+.gitignore
+  s_086e95251eec37::t_08c63e52df4b10 1-5
+README.md
+  s_086e95251eec37::t_cdc2c52cfcc6d4 1-47
+config.schema.json
+  s_086e95251eec37::t_a1fa466bc73a86 1-48
+package.json
+  s_086e95251eec37::t_dda2e74100dc87 1-37
+src/easynet/codec.ts
+  s_086e95251eec37::t_898db85f826cce 1-35
+src/index.ts
+  s_086e95251eec37::t_85761354a2cc3a 1-8
+src/platform.ts
+  s_086e95251eec37::t_f14a9b175c4b88 1-57
+src/settings.ts
+  s_086e95251eec37::t_ffe486bddc423f 1-2
+src/tools/probe.ts
+  s_086e95251eec37::t_5b0d25dc1cd706 1-56
+tsconfig.json
+  s_086e95251eec37::t_99e641551f128e 1-16
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.6",
+  "base_commit_sha": "353eee4486959e5c595b4bf67f6d1bff8eb7062d",
+  "prompts": {},
+  "sessions": {
+    "s_086e95251eec37": {
+      "agent_id": {
+        "tool": "github-copilot-cli",
+        "id": "5d6f0941-56a7-4d49-a990-6c10e3ed31ba",
+        "model": "unknown"
+      },
+      "human_author": "Martín Calvete Iglesias <martinci@servicioexterno.inditex.com>"
+    }
+  }
+}
