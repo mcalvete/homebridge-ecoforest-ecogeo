@@ -46,6 +46,42 @@ async function initialized(t, config) {
   return f;
 }
 
+test('all alarm and demand contacts are closed for active and open for inactive states', async t => {
+  const f = await initialized(t, { heatingCoolingGroupCount: 5 });
+  const state = await readState(f.client);
+  const kinds = ['alarm', 'demand-heating', 'demand-dhw',
+    ...Array.from({ length: 5 }, (_, g) => `demand-g${g + 1}`)];
+  const { ContactSensorState, StatusFault } = hap.Characteristic;
+  for (const active of [false, true, false]) {
+    state.alarm = active ? 'G040' : null;
+    state.demands.heating = active;
+    state.demands.dhw = active;
+    state.groupDemands = Array(5).fill(active ? 1 : 0);
+    for (const handler of f.platform.handlers) handler.update(state);
+    for (const kind of kinds) {
+      const sensor = f.service(kind, hap.Service.ContactSensor);
+      const contact = sensor.getCharacteristic(ContactSensorState);
+      assert.equal(contact.value, active
+        ? ContactSensorState.CONTACT_DETECTED : ContactSensorState.CONTACT_NOT_DETECTED, kind);
+      assert.equal(contact.statusCode, hap.HAPStatus.SUCCESS, kind);
+      assert.ok(!contact.props.perms.includes('pw'), kind);
+    }
+    assert.equal(f.service('alarm', hap.Service.ContactSensor).getCharacteristic(StatusFault).value,
+      active ? StatusFault.GENERAL_FAULT : StatusFault.NO_FAULT);
+  }
+  state.groupDemands = Array(5).fill(2);
+  for (const handler of f.platform.handlers) handler.update(state);
+  for (const kind of kinds.filter(k => k.startsWith('demand-g'))) {
+    assert.equal(f.service(kind, hap.Service.ContactSensor).getCharacteristic(ContactSensorState).value,
+      ContactSensorState.CONTACT_DETECTED, kind);
+  }
+  for (const handler of f.platform.handlers) handler.unavailable();
+  for (const kind of kinds) {
+    assert.equal(f.service(kind, hap.Service.ContactSensor).getCharacteristic(ContactSensorState).statusCode,
+      hap.HAPStatus.SERVICE_COMMUNICATION_FAILURE, kind);
+  }
+});
+
 test('English accessories keep stable UUIDs and the Combined option retains its subtype', async t => {
   const f = await initialized(t);
   assert.equal(f.accessories.length, 19);

@@ -180,7 +180,9 @@ Program selection is separate from the main power switch.
 | **Heat Pump Alarm** | Whether easyNet reports an active alarm; check easyNet or the machine for details |
 
 Demand and alarm accessories appear as **contact sensors**:
-**open means active**, and **closed means inactive**. They are read-only.
+**closed means active** (Yes in Eve), and **open means inactive** (No in Eve).
+They are read-only. This mapping reverses the behavior of versions 0.1.0 and 0.1.1;
+review existing automations that use alarm or demand contact states before updating.
 A demand indicates a request, not necessarily that the compressor is running.
 
 ### Power, consumption, COP and pressures

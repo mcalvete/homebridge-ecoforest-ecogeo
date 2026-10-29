@@ -37,7 +37,7 @@
         "default": 2,
         "minimum": 0,
         "maximum": 5,
-        "description": "Creates a \"Gn Consumption Demand\" contact sensor (open while the group has demand) and a \"Gn Setpoint Temperature\" sensor for each group."
+        "description": "Creates a \"Gn Consumption Demand\" contact sensor (closed / Yes while the group has demand; open / No otherwise) and a \"Gn Setpoint Temperature\" sensor for each group."
       },
       "pollInterval": {
         "title": "Polling interval (seconds)",

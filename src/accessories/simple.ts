@@ -56,7 +56,7 @@ export class PowerSwitchAccessory extends EcoGeoAccessory {
   }
 }
 
-/** Contact "open" while the heat pump reports an active alarm. */
+/** Contact "closed" (Yes in Eve) while the heat pump reports an active alarm. */
 export class AlarmAccessory extends EcoGeoAccessory {
   private readonly sensor: Service;
 
@@ -71,14 +71,14 @@ export class AlarmAccessory extends EcoGeoAccessory {
     const alarm = state.alarm !== null;
     this.sensor.updateCharacteristic(
       ContactSensorState,
-      alarm ? ContactSensorState.CONTACT_NOT_DETECTED : ContactSensorState.CONTACT_DETECTED,
+      alarm ? ContactSensorState.CONTACT_DETECTED : ContactSensorState.CONTACT_NOT_DETECTED,
     );
     this.sensor.updateCharacteristic(StatusFault, alarm ? StatusFault.GENERAL_FAULT : StatusFault.NO_FAULT);
   }
 }
 
 /**
- * Contact sensor that is "open" while a demand is active. Switches were tried first, but the
+ * Contact sensor that is "closed" (Yes in Eve) while a demand is active. Switches were tried first, but the
  * Home app does not show them (Eve does), so a natively read-only sensor is used instead.
  */
 export class DemandSensorAccessory extends EcoGeoAccessory {
@@ -105,7 +105,7 @@ export class DemandSensorAccessory extends EcoGeoAccessory {
     const { ContactSensorState } = this.platform.api.hap.Characteristic;
     this.sensor.updateCharacteristic(
       ContactSensorState,
-      this.isActive(state) ? ContactSensorState.CONTACT_NOT_DETECTED : ContactSensorState.CONTACT_DETECTED,
+      this.isActive(state) ? ContactSensorState.CONTACT_DETECTED : ContactSensorState.CONTACT_NOT_DETECTED,
     );
   }
 }
