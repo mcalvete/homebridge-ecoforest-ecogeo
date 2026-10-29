@@ -156,13 +156,19 @@ test('poll failures and missing sensors report HomeKit faults and recover on val
   assert.equal(f.errors.length, 1);
 });
 
-test('undefined COP is not reported as zero and does not poison unrelated metrics', async t => {
+test('zero electrical power shows zero COP without a HomeKit communication fault', async t => {
   const f = await initialized(t);
   f.client.demands[3] = '0000';
   const state = await readState(f.client);
   for (const handler of f.platform.handlers) handler.update(state);
   const cop = f.service('cop', hap.Service.LightSensor).getCharacteristic(hap.Characteristic.CurrentAmbientLightLevel);
+  assert.equal(state.cop, 0);
+  assert.equal(cop.value, 0.0001);
+  assert.equal(cop.statusCode, hap.HAPStatus.SUCCESS);
+  f.platform.handlers.find(h => h.accessory.context.kind === 'cop').unavailable();
   assert.equal(cop.statusCode, hap.HAPStatus.SERVICE_COMMUNICATION_FAILURE);
+  for (const handler of f.platform.handlers) handler.update(state);
+  assert.equal(cop.statusCode, hap.HAPStatus.SUCCESS);
   const power = f.service('electric-power', hap.Service.LightSensor).getCharacteristic(hap.Characteristic.CurrentAmbientLightLevel);
   assert.equal(power.value, 0.0001);
   assert.equal(power.statusCode, hap.HAPStatus.SUCCESS);

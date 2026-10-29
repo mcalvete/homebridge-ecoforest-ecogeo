@@ -205,8 +205,8 @@ export interface EcoGeoState {
   groupSupplySetpoints: (number | null)[];
   /** Instantaneous power in watts. */
   power: { heating: number; cooling: number; electric: number };
-  /** Heating COP (heating / electric), null when electric power is zero. */
-  cop: number | null;
+  /** Heating COP (heating / electric), displayed as zero when electric power is zero. */
+  cop: number;
   /** Electric energy consumed (kWh) in the current day and month. */
   energy: { today: number | null; month: number | null };
   /** Alarm code reported by easyNet, or null when there is no active alarm. */
@@ -287,7 +287,7 @@ export async function readState(client: EasyNetClient): Promise<EcoGeoState> {
       return parseAnalog(blockValue(tanks, FIRST_GROUP_SETPOINT_INDEX + g));
     }),
     power: { heating: heatingPower, cooling: coolingPower, electric: electricPower },
-    cop: electricPower > 0 ? Math.round((heatingPower / electricPower) * 10) / 10 : null,
+    cop: electricPower > 0 ? Math.round((heatingPower / electricPower) * 10) / 10 : 0,
     energy: {
       today: electricEnergyKwh(energyToday, 'D', includePumps),
       month: electricEnergyKwh(energyMonth, 'M', includePumps),

@@ -58,7 +58,7 @@ test('state distinguishes production, requests, alarms and idle COP', async () =
   assert.equal(state.demands.heating, true);
   assert.equal(state.demands.dhw, true);
   assert.equal(state.alarm, 'G040');
-  assert.equal(state.cop, null);
+  assert.equal(state.cop, 0);
 });
 
 test('heating production recognizes direct and buffer-tank operation modes', async () => {

@@ -210,7 +210,8 @@ Keep these display limitations in mind:
 
 - A real zero is shown as `0.0001 lx`, the minimum light-sensor value.
 - Light-sensor readings are capped at `100000 lx`.
-- COP is unavailable when electrical power is zero; it is not shown as a false zero.
+- COP is reported as zero when electrical power is zero, rather than as unavailable.
+  Apple Home displays this as `0.0001 lx`, like other zero readings.
 - Missing sensors and failed readings are reported as unavailable rather than
   retaining valid-looking old values.
 
@@ -224,7 +225,7 @@ Keep these display limitations in mind:
 | The main power switch returns to on | This is expected in `confirm` mode after the first off command. Send a second off command within 10 seconds. |
 | Heating cannot change its target temperature | The displayed target is the heat pump's calculated buffer setpoint and is intentionally read-only. |
 | A circuit temperature looks different from a thermometer | G1..Gn sensors show requested supply setpoints, not actual measured temperatures. |
-| COP alone is unavailable | This is expected when electrical power is zero. |
+| COP reads zero while the machine is idle | This is expected when electrical power is zero; Apple Home displays `0.0001 lx`. |
 | A value is displayed in lx | This is the Apple Home presentation workaround explained above; use a compatible app such as Eve for supported measurements in their actual units. |
 
 For further diagnosis, temporarily enable `debug` in the plugin settings and check
