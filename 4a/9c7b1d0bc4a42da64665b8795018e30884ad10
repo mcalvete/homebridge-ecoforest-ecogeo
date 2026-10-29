@@ -1,0 +1,51 @@
+README.md
+  s_086e95251eec37::t_c94364f3268717 5-33,37-44,48,50,52-53,55,57,60-61,63-64,68-87,90-94,102,105,111-122,133,136-141,146-149,170-174
+config.schema.json
+  s_086e95251eec37::t_e258feb9c8f3b7 18,34-35,40
+package.json
+  s_086e95251eec37::t_f6ee6a44d3d2fc 28
+src/accessories/base.ts
+  s_086e95251eec37::t_b6925afa9b7bf2 9-10,30-70,78,98,117,119-121
+src/accessories/metrics.ts
+  s_086e95251eec37::t_73651e3276fb08 13,43-47,51,54-59
+src/accessories/simple.ts
+  s_086e95251eec37::t_d85f92a4791975 46-50,55,117,127,145-149,152,163
+src/accessories/thermostats.ts
+  s_086e95251eec37::t_d5006643d0bf0e 11-12,50,65,101,110,118
+src/easynet/client.ts
+  s_086e95251eec37::t_0b8f56e3dbf642 4,26,47,49-51,54-56,74,77-79,87,92-94,103,106-107,114-115,119-124,127-133,151-153,161-186,199-201,242-243,248-249,253-258
+src/easynet/codec.ts
+  s_086e95251eec37::t_4e8e6fd1086c10 9,12,22-25,30
+src/easynet/registers.ts
+  s_086e95251eec37::t_743ab00ad68619 2,11,126,134-166,173,177,181-184,198,200,202,208,218,222-236,248,251-253,261,264-268,271,274,283-285,287
+src/platform.ts
+  s_086e95251eec37::t_ebbc6c6cd7c6f1 30-31,57,60,63,73,78,84,95-96,99,119,129-130,135-156,162-168,186-189,196,199-204,219-221,230-232,238-240,244-246,260,263-265,274
+src/tools/probe.ts
+  s_086e95251eec37::t_000d3e1e9bb2be 5,12,25-30,35-37,56,58-59,62-63
+test/fixtures.js
+  s_086e95251eec37::t_30f8a8102d43b2 1-31
+test/homekit.test.js
+  s_086e95251eec37::t_db6a5f22c9353f 1-204
+test/probe.test.js
+  s_086e95251eec37::t_1f0ce38d791969 1-20
+test/protocol.test.js
+  s_086e95251eec37::t_0fb83a9f7a153f 1-142
+test/state.test.js
+  s_086e95251eec37::t_461e54acc1851a 1-92
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.6",
+  "base_commit_sha": "4a9c7b1d0bc4a42da64665b8795018e30884ad10",
+  "prompts": {},
+  "sessions": {
+    "s_086e95251eec37": {
+      "agent_id": {
+        "tool": "github-copilot-cli",
+        "id": "5d6f0941-56a7-4d49-a990-6c10e3ed31ba",
+        "model": "unknown"
+      },
+      "human_author": "Martín Calvete Iglesias <martinci@servicioexterno.inditex.com>"
+    }
+  }
+}
