@@ -1,0 +1,82 @@
+{
+  "pluginAlias": "EcoforestEcoGeo",
+  "pluginType": "platform",
+  "singular": true,
+  "headerDisplay": "Ecoforest ecoGEO heat pump through the local easyNet web interface.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "title": "Name",
+        "type": "string",
+        "default": "ecoGEO",
+        "required": true
+      },
+      "host": {
+        "title": "easyNet URL",
+        "type": "string",
+        "placeholder": "https://YOUR_EASYNET_HOST",
+        "description": "Base URL of the heat pump web interface (http:// or https://).",
+        "required": true
+      },
+      "username": {
+        "title": "Username",
+        "type": "string",
+        "description": "Heat pump serial number (same as the easyNet web login).",
+        "required": true
+      },
+      "password": {
+        "title": "Password",
+        "type": "string",
+        "description": "First 8 characters of the original Wi-Fi password (same as the easyNet web login).",
+        "required": true
+      },
+      "heatingCoolingGroupCount": {
+        "title": "Number of heating/cooling circuits (G1..Gn)",
+        "type": "integer",
+        "default": 2,
+        "minimum": 0,
+        "maximum": 5,
+        "description": "Creates a \"Gn Consumption Demand\" contact sensor (open while the group has demand) and a \"Gn Setpoint Temperature\" sensor for each group."
+      },
+      "pollInterval": {
+        "title": "Polling interval (seconds)",
+        "type": "integer",
+        "default": 60,
+        "minimum": 15,
+        "maximum": 3600
+      },
+      "powerSwitchMode": {
+        "title": "Power switch behaviour",
+        "type": "string",
+        "default": "confirm",
+        "oneOf": [
+          {
+            "title": "Confirm: tap \"off\" twice within 10 s",
+            "enum": [
+              "confirm"
+            ]
+          },
+          {
+            "title": "Normal switch",
+            "enum": [
+              "normal"
+            ]
+          },
+          {
+            "title": "Read-only (status only)",
+            "enum": [
+              "readonly"
+            ]
+          }
+        ],
+        "description": "HomeKit cannot ask for confirmation, so switching the whole heat pump off can require a second tap."
+      },
+      "debug": {
+        "title": "Verbose logging",
+        "type": "boolean",
+        "default": false
+      }
+    }
+  }
+}

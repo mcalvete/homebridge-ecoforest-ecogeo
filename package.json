@@ -1,0 +1,49 @@
+{
+  "name": "homebridge-ecoforest-ecogeo",
+  "displayName": "Ecoforest ecoGEO",
+  "version": "0.1.0",
+  "description": "Homebridge plugin for Ecoforest ecoGEO heat pumps through the local easyNet web interface.",
+  "license": "MIT",
+  "author": "Martín Calvete Iglesias",
+  "homepage": "https://github.com/mcalvete/homebridge-ecoforest-ecogeo#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mcalvete/homebridge-ecoforest-ecogeo.git"
+  },
+  "bugs": {
+    "url": "https://github.com/mcalvete/homebridge-ecoforest-ecogeo/issues"
+  },
+  "type": "module",
+  "main": "dist/index.js",
+  "files": [
+    "dist",
+    "config.schema.json",
+    "README.md",
+    "LICENSE"
+  ],
+  "keywords": [
+    "homebridge-plugin",
+    "supports-hap",
+    "ecoforest",
+    "ecogeo",
+    "easynet",
+    "heat-pump"
+  ],
+  "engines": {
+    "node": "^20.18.0 || ^22.10.0 || ^24.0.0",
+    "homebridge": "^1.8.0 || ^2.0.0-beta.0"
+  },
+  "scripts": {
+    "clean": "rm -rf dist",
+    "build": "npm run clean && tsc",
+    "test": "npm run build && node --test test/*.test.js",
+    "watch": "tsc --watch",
+    "probe": "node dist/tools/probe.js",
+    "prepublishOnly": "npm run build"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "homebridge": "^2.0.0",
+    "typescript": "^5.7.0"
+  }
+}
