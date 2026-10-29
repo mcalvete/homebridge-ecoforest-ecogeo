@@ -1,0 +1,20 @@
+README.md
+  h_cbbd59f4334615 183-185
+config.schema.json
+  h_cbbd59f4334615 40
+src/accessories/simple.ts
+  h_cbbd59f4334615 59,74,81,108
+test/homekit.test.js
+  h_cbbd59f4334615 49-84
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.6",
+  "base_commit_sha": "8b967e7f67c2a911aa8681f01234557d23044398",
+  "prompts": {},
+  "humans": {
+    "h_cbbd59f4334615": {
+      "author": "Martín Calvete Iglesias <mcalvete@users.noreply.github.com>"
+    }
+  }
+}
