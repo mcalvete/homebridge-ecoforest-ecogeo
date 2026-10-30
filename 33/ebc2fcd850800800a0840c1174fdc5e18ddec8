@@ -1,0 +1,24 @@
+README.md
+  h_cbbd59f4334615 109,125,150-163
+config.schema.json
+  h_cbbd59f4334615 15-29
+src/accessories/simple.ts
+  h_cbbd59f4334615 113-117,133-134
+src/platform.ts
+  h_cbbd59f4334615 22,30,48,59-62,65,70,75,80,83,86,91,94-98,101,149-152,177-180,201
+src/translations.ts
+  h_cbbd59f4334615 1-172
+test/homekit.test.js
+  h_cbbd59f4334615 3,8,111-201,218-219
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.6",
+  "base_commit_sha": "33ebc2fcd850800800a0840c1174fdc5e18ddec8",
+  "prompts": {},
+  "humans": {
+    "h_cbbd59f4334615": {
+      "author": "Martín Calvete Iglesias <mcalvete@users.noreply.github.com>"
+    }
+  }
+}
