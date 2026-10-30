@@ -1,9 +1,11 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
+import { readFileSync } from 'node:fs';
 import * as hap from '@homebridge/hap-nodejs';
 import { EcoGeoPlatform } from '../dist/platform.js';
 import { readState } from '../dist/easynet/registers.js';
 import { controllerFixture } from './fixtures.js';
+import { translations } from '../dist/translations.js';
 
 class PlatformAccessory extends hap.Accessory {
   context = {};
@@ -106,6 +108,97 @@ test('English accessories keep stable UUIDs and the Combined option retains its 
   assert.equal(combined.getCharacteristic(hap.Characteristic.ConfiguredName).value, 'Custom program');
 });
 
+test('Spanish defaults localize every accessory and program without changing identity', async t => {
+  const en = await initialized(t, { language: 'en', heatingCoolingGroupCount: 5 });
+  const es = await initialized(t, { language: 'es', heatingCoolingGroupCount: 5 });
+  const expected = [
+    'ACS', 'Calefacción', 'Temperatura exterior', 'Impulsión producción',
+    ...Array.from({ length: 5 }, (_, g) => `G${g + 1} Temperatura de consigna`),
+    'Potencia eléctrica', 'Consumo día actual', 'Consumo mes actual', 'COP',
+    'Presión producción', 'Presión captación', 'Bomba de calor', 'Programa',
+    'Alarma bomba de calor', 'Demanda producción calefacción', 'Demanda producción ACS',
+    ...Array.from({ length: 5 }, (_, g) => `G${g + 1} Demanda consumo`),
+  ];
+  assert.deepEqual(es.accessories.map(a => a.displayName), expected);
+  assert.deepEqual(es.accessories.map(a => a.UUID), en.accessories.map(a => a.UUID));
+  assert.deepEqual(Object.keys(translations.es), Object.keys(translations.en));
+  const program = es.accessories.find(a => a.context.kind === 'program');
+  for (const [subtype, name] of [
+    ['winter', 'Invierno'], ['summer', 'Verano'], ['auto', 'Auto'], ['mixed', 'Mixto'],
+  ]) {
+    const service = program.getServiceById(hap.Service.Switch, subtype);
+    assert.equal(service.getCharacteristic(hap.Characteristic.Name).value, name);
+    assert.equal(service.getCharacteristic(hap.Characteristic.ConfiguredName).value, name);
+  }
+  await program.getServiceById(hap.Service.Switch, 'mixed')
+    .getCharacteristic(hap.Characteristic.On).handleSetRequest(true);
+  assert.deepEqual(es.writes, [['register', 6101, 3]]);
+});
+
+test('all seven language catalogs match the configuration and preserve accessory identity', async t => {
+  const schema = JSON.parse(readFileSync(new URL('../config.schema.json', import.meta.url), 'utf8'));
+  const options = schema.schema.properties.language.oneOf.map(option => option.enum[0]);
+  assert.deepEqual(options, Object.keys(translations));
+  assert.equal(schema.schema.properties.language.default, 'en');
+  const reference = await initialized(t);
+  const programLabels = {
+    en: ['Winter', 'Summer', 'Auto', 'Combined'],
+    es: ['Invierno', 'Verano', 'Auto', 'Mixto'],
+    de: ['Winter', 'Sommer', 'Automatik', 'Gemischt'],
+    fr: ['Hiver', 'Été', 'Auto', 'Mixte'],
+    it: ['Inverno', 'Estate', 'Auto', 'Misto'],
+    nl: ['Winter', 'Zomer', 'Auto', 'Gemengd'],
+    pl: ['Zima', 'Lato', 'Auto', 'Mieszany'],
+  };
+  for (const language of options) {
+    const names = translations[language];
+    assert.deepEqual(Object.keys(names), Object.keys(translations.en));
+    for (const value of Object.values(names)) {
+      assert.equal(typeof value, 'string');
+      assert.ok(value.trim().length > 0);
+      assert.match(value, /^[\p{L}\p{N}](?:.*[\p{L}\p{N}])?$/u);
+    }
+    const f = await initialized(t, { language });
+    assert.deepEqual(f.accessories.map(a => a.UUID), reference.accessories.map(a => a.UUID));
+    const expected = [
+      names.dhw, names.heating, names.outdoor, names.productionSupply,
+      `G1 ${names.groupSetpoint}`, `G2 ${names.groupSetpoint}`,
+      names.electricPower, names.consumptionDay, names.consumptionMonth, names.cop,
+      names.productionPressure, names.brinePressure, names.heatPump, names.program,
+      names.alarm, names.heatingDemand, names.dhwDemand,
+      `G1 ${names.groupDemand}`, `G2 ${names.groupDemand}`,
+    ];
+    assert.deepEqual(f.accessories.map(a => a.displayName), expected);
+    const program = f.accessories.find(a => a.context.kind === 'program');
+    for (const [index, subtype] of ['winter', 'summer', 'auto', 'mixed'].entries()) {
+      const service = program.getServiceById(hap.Service.Switch, subtype);
+      assert.equal(service.getCharacteristic(hap.Characteristic.Name).value, programLabels[language][index]);
+      assert.equal(service.getCharacteristic(hap.Characteristic.ConfiguredName).value, programLabels[language][index]);
+    }
+  }
+});
+
+test('language changes preserve cached and customized names, UUIDs and program subtypes', async t => {
+  const original = await initialized(t, { language: 'es' });
+  const dhw = original.accessories.find(a => a.context.kind === 'dhw');
+  dhw.displayName = 'My custom tank';
+  const program = original.accessories.find(a => a.context.kind === 'program');
+  const winter = program.getServiceById(hap.Service.Switch, 'winter');
+  winter.setCharacteristic(hap.Characteristic.ConfiguredName, 'My winter');
+  const uuids = original.accessories.map(a => a.UUID);
+  const restored = platformFixture({ language: 'en' });
+  t.after(() => restored.dispose());
+  for (const a of original.accessories) restored.platform.configureAccessory(a);
+  restored.platform.setupAccessories();
+  assert.equal(restored.accessories.length, 0);
+  assert.deepEqual(restored.platform.handlers.map(h => h.accessory.UUID), uuids);
+  assert.equal(dhw.displayName, 'My custom tank');
+  assert.equal(original.accessories.find(a => a.context.kind === 'heating').displayName, 'Calefacción');
+  assert.equal(winter.getCharacteristic(hap.Characteristic.ConfiguredName).value, 'My winter');
+  assert.equal(program.getServiceById(hap.Service.Switch, 'mixed')
+    .getCharacteristic(hap.Characteristic.ConfiguredName).value, 'Mixto');
+});
+
 test('configuration honors new and legacy counts and rejects invalid values before removing accessories', t => {
   for (const [config, expected] of [
     [{}, 2], [{ heatingCoolingGroupCount: 0 }, 0], [{ groups: 4 }, 4],
@@ -122,6 +215,8 @@ test('configuration honors new and legacy counts and rejects invalid values befo
     { heatingCoolingGroupCount: 1.5 }, { heatingCoolingGroupCount: NaN },
     { pollInterval: 0 }, { pollInterval: Infinity }, { pollInterval: '60' },
     { powerSwitchMode: 'invalid' }, { host: 'https://[' }, { host: 'ftp://example.invalid' },
+    { language: 'pt' }, { language: '' }, { language: null }, { language: '__proto__' },
+    { language: 'constructor' }, { language: 'toString' },
   ]) {
     const f = platformFixture(config);
     assert.equal(f.events.size, 0);

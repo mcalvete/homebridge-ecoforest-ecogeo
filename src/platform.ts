@@ -19,6 +19,7 @@ import { DhwAccessory, HeatingAccessory } from './accessories/thermostats.js';
 import { EasyNetClient } from './easynet/client.js';
 import { GroupDemand, MAX_GROUPS, readState, type EcoGeoState } from './easynet/registers.js';
 import { PLATFORM_NAME, PLUGIN_NAME } from './settings.js';
+import { translations, type AccessoryNames, type Language } from './translations.js';
 
 export interface EcoGeoConfig extends PlatformConfig {
   host?: string;
@@ -26,6 +27,7 @@ export interface EcoGeoConfig extends PlatformConfig {
   password?: string;
   pollInterval?: number;
   powerSwitchMode?: PowerSwitchMode;
+  language?: Language;
   /** Number of consumption groups installed (G1..Gn). */
   heatingCoolingGroupCount?: number;
   /** @deprecated Use heatingCoolingGroupCount instead. */
@@ -43,7 +45,7 @@ interface AccessoryDefinition {
 
 const DEFAULT_GROUPS = 2;
 
-function accessoryDefinitions(groups: number): AccessoryDefinition[] {
+function accessoryDefinitions(groups: number, names: AccessoryNames): AccessoryDefinition[] {
   const demand = (isActive: (s: EcoGeoState) => boolean): AccessoryFactory =>
     (platform, accessory) => new DemandSensorAccessory(platform, accessory, isActive);
   const temperature = (value: (s: EcoGeoState) => number | null): AccessoryFactory =>
@@ -54,49 +56,49 @@ function accessoryDefinitions(groups: number): AccessoryDefinition[] {
     Array.from({ length: groups }, (_, g) => build(g));
 
   return [
-    { kind: 'dhw', name: 'DHW', create: (p, a) => new DhwAccessory(p, a) },
-    { kind: 'heating', name: 'Heating', create: (p, a) => new HeatingAccessory(p, a) },
-    { kind: 'outdoor', name: 'Outdoor Temperature', create: temperature((s) => s.main.outdoor) },
-    { kind: 'heating-supply', name: 'Production Supply', create: temperature((s) => s.main.heatingSupply) },
+    { kind: 'dhw', name: names.dhw, create: (p, a) => new DhwAccessory(p, a) },
+    { kind: 'heating', name: names.heating, create: (p, a) => new HeatingAccessory(p, a) },
+    { kind: 'outdoor', name: names.outdoor, create: temperature((s) => s.main.outdoor) },
+    { kind: 'heating-supply', name: names.productionSupply, create: temperature((s) => s.main.heatingSupply) },
     ...perGroup((g) => ({
       kind: `supply-setpoint-g${g + 1}`,
-      name: `G${g + 1} Setpoint Temperature`,
+      name: `G${g + 1} ${names.groupSetpoint}`,
       create: temperature((s) => s.groupSupplySetpoints[g]),
     })),
     {
       kind: 'electric-power',
-      name: 'Electric Power',
+      name: names.electricPower,
       create: metric({ value: (s) => s.power.electric, eve: { characteristic: 'Consumption', scale: 1 } }),
     },
     {
       kind: 'energy-today',
-      name: 'Consumption Current Day',
+      name: names.consumptionDay,
       create: metric({ value: (s) => s.energy.today, eve: { characteristic: 'TotalConsumption', scale: 1 } }),
     },
     {
       kind: 'energy-month',
-      name: 'Consumption Current Month',
+      name: names.consumptionMonth,
       create: metric({ value: (s) => s.energy.month, eve: { characteristic: 'TotalConsumption', scale: 1 } }),
     },
-    { kind: 'cop', name: 'COP', create: metric({ value: (s) => s.cop }) },
+    { kind: 'cop', name: names.cop, create: metric({ value: (s) => s.cop }) },
     {
       kind: 'heating-pressure',
-      name: 'Production Pressure',
+      name: names.productionPressure,
       create: metric({ value: (s) => s.main.heatingPressure, eve: { characteristic: 'AirPressure', scale: 1000 } }),
     },
     {
       kind: 'brine-pressure',
-      name: 'Brine Pressure',
+      name: names.brinePressure,
       create: metric({ value: (s) => s.main.brinePressure, eve: { characteristic: 'AirPressure', scale: 1000 } }),
     },
-    { kind: 'power', name: 'Heat Pump', create: (p, a) => new PowerSwitchAccessory(p, a) },
-    { kind: 'program', name: 'Program', create: (p, a) => new ProgramSelectorAccessory(p, a) },
-    { kind: 'alarm', name: 'Heat Pump Alarm', create: (p, a) => new AlarmAccessory(p, a) },
-    { kind: 'demand-heating', name: 'Heating Production Demand', create: demand((s) => s.demands.heating) },
-    { kind: 'demand-dhw', name: 'DHW Production Demand', create: demand((s) => s.demands.dhw) },
+    { kind: 'power', name: names.heatPump, create: (p, a) => new PowerSwitchAccessory(p, a) },
+    { kind: 'program', name: names.program, create: (p, a) => new ProgramSelectorAccessory(p, a) },
+    { kind: 'alarm', name: names.alarm, create: (p, a) => new AlarmAccessory(p, a) },
+    { kind: 'demand-heating', name: names.heatingDemand, create: demand((s) => s.demands.heating) },
+    { kind: 'demand-dhw', name: names.dhwDemand, create: demand((s) => s.demands.dhw) },
     ...perGroup((g) => ({
       kind: `demand-g${g + 1}`,
-      name: `G${g + 1} Consumption Demand`,
+      name: `G${g + 1} ${names.groupDemand}`,
       create: demand((s) => s.groupDemands[g] !== GroupDemand.None),
     })),
   ];
@@ -144,6 +146,10 @@ export class EcoGeoPlatform implements DynamicPlatformPlugin {
       if (config.powerSwitchMode !== undefined && !['normal', 'confirm', 'readonly'].includes(config.powerSwitchMode)) {
         throw new Error('"powerSwitchMode" must be normal, confirm or readonly');
       }
+      if (config.language !== undefined
+        && (typeof config.language !== 'string' || !Object.hasOwn(translations, config.language))) {
+        throw new Error(`"language" must be one of: ${Object.keys(translations).join(', ')}`);
+      }
       this.easyNet = new EasyNetClient({
         host,
         username,
@@ -168,6 +174,10 @@ export class EcoGeoPlatform implements DynamicPlatformPlugin {
     });
   }
 
+  get names(): AccessoryNames {
+    return translations[this.config.language ?? 'en'];
+  }
+
   /** Only available with a valid config; accessories are created only in that case. */
   get client(): EasyNetClient {
     if (!this.easyNet) {
@@ -188,7 +198,7 @@ export class EcoGeoPlatform implements DynamicPlatformPlugin {
     }
     const groups = this.config.heatingCoolingGroupCount ?? this.config.groups ?? DEFAULT_GROUPS;
 
-    for (const { kind, name, create } of accessoryDefinitions(groups)) {
+    for (const { kind, name, create } of accessoryDefinitions(groups, this.names)) {
       const uuid = this.api.hap.uuid.generate(`${PLUGIN_NAME}:${this.serial}:${kind}`);
       activeUuids.add(uuid);
 

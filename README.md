@@ -106,6 +106,7 @@ to the `platforms` array in your Homebridge configuration:
 {
   "platform": "EcoforestEcoGeo",
   "name": "ecoGEO",
+  "language": "en",
   "host": "https://YOUR_EASYNET_HOST",
   "username": "YOUR_SERIAL_NUMBER",
   "password": "YOUR_EASYNET_PASSWORD",
@@ -121,6 +122,7 @@ when sharing configuration or asking for help.
 | Setting | What to enter |
 |---|---|
 | `host` | Your heat pump's local easyNet URL, including `https://` or `http://`. Replace `YOUR_EASYNET_HOST` with its local hostname or IP address. |
+| `language` | Default names for new accessories and Program options: `en` (English, default), `es` (Spanish), `de` (German), `fr` (French), `it` (Italian), `nl` (Dutch) or `pl` (Polish). Independent of the easyNet display language. Restart Homebridge after changing it. |
 | `username` | The username used to sign in to easyNet, normally the heat pump serial number. |
 | `password` | Your easyNet password. On the tested installation, this is the first 8 characters of the original Wi-Fi password. |
 | `heatingCoolingGroupCount` | Number of installed circuits G1..Gn. Default: `2`; allowed range: `0` to `5`. Each adds a demand sensor and a supply setpoint sensor. |
@@ -145,9 +147,20 @@ rather than switching off the entire heat pump.
 
 ## Using Apple Home
 
-Default accessory names follow the English easyNet interface. You can rename them
-and assign rooms in Apple Home; custom names are preserved. Changing the easyNet
-display language does not affect the plugin.
+Default accessory names follow easyNet terminology in the selected `language`.
+All seven languages listed in the checked easyNet interface are available: English,
+Spanish, German, French, Italian, Dutch and Polish. Names are based on its language
+files, with compound labels adapted for the plugin and obvious mistranslations
+corrected for clarity. Polish abbreviations use `CWU` and `CO` without trailing
+periods to meet HomeKit naming requirements. Translations are included in the plugin, so no translation
+download or change to easyNet settings is needed.
+
+The tables below use the English names. You can rename accessories and assign rooms
+in Apple Home; custom names are preserved. The language setting applies when
+accessories or Program options are first created. Existing cached names are kept,
+even when you change the language; rename these manually in Apple Home if needed.
+Changing language does not recreate accessories or change their identifiers.
+Do not delete or re-pair accessories just to change their names.
 
 ### DHW and heating
 

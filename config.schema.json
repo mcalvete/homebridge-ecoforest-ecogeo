@@ -12,6 +12,21 @@
         "default": "ecoGEO",
         "required": true
       },
+      "language": {
+        "title": "Default accessory language",
+        "type": "string",
+        "default": "en",
+        "oneOf": [
+          { "title": "English", "enum": ["en"] },
+          { "title": "Español", "enum": ["es"] },
+          { "title": "Deutsch", "enum": ["de"] },
+          { "title": "Français", "enum": ["fr"] },
+          { "title": "Italiano", "enum": ["it"] },
+          { "title": "Nederlands", "enum": ["nl"] },
+          { "title": "Polski", "enum": ["pl"] }
+        ],
+        "description": "Language for newly created accessory names and Program options. Existing accessory names and names customized in Apple Home are preserved. Does not change the easyNet language."
+      },
       "host": {
         "title": "easyNet URL",
         "type": "string",

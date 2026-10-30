@@ -110,11 +110,11 @@ export class DemandSensorAccessory extends EcoGeoAccessory {
   }
 }
 
-const PROGRAMS: { program: Program; subtype: string; name: string }[] = [
-  { program: Program.Winter, subtype: 'winter', name: 'Winter' },
-  { program: Program.Summer, subtype: 'summer', name: 'Summer' },
-  { program: Program.Auto, subtype: 'auto', name: 'Auto' },
-  { program: Program.Mixed, subtype: 'mixed', name: 'Combined' },
+const PROGRAMS: { program: Program; subtype: 'winter' | 'summer' | 'auto' | 'mixed' }[] = [
+  { program: Program.Winter, subtype: 'winter' },
+  { program: Program.Summer, subtype: 'summer' },
+  { program: Program.Auto, subtype: 'auto' },
+  { program: Program.Mixed, subtype: 'mixed' },
 ];
 
 /**
@@ -130,10 +130,10 @@ export class ProgramSelectorAccessory extends EcoGeoAccessory {
     super(platform, accessory);
     const { Service, Characteristic } = platform.api.hap;
 
-    for (const { program, subtype, name } of PROGRAMS) {
+    for (const { program, subtype } of PROGRAMS) {
+      const name = platform.names[subtype];
       const service = accessory.getServiceById(Service.Switch, subtype)
         ?? accessory.addService(Service.Switch, name, subtype);
-      service.setCharacteristic(Characteristic.Name, name);
       // Only seed the name: the user may rename each option in the Home app.
       if (!service.testCharacteristic(Characteristic.ConfiguredName)) {
         service.addCharacteristic(Characteristic.ConfiguredName).updateValue(name);
