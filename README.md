@@ -36,6 +36,7 @@ You need:
 The plugin has been tested with one installation using easyNet 2024 firmware,
 Homebridge 2.4 and Node.js 24. Other firmware versions and equipment configurations
 have not been verified and may use a different protocol.
+The automated test suite also passes on Node.js 26.13.1.
 
 Use a trusted local network. Do not expose easyNet directly to the internet.
 HTTPS certificate verification is currently disabled to accept easyNet's self-signed
