@@ -9,6 +9,11 @@ No Modbus adapter or additional wiring is required.
 It can change how your heat pump operates. Read the [safety notice](#safety-and-disclaimer)
 before enabling controls.
 
+> **Enjoying the plugin? Buy me a coffee!**
+> You can support its development with a voluntary donation on Ko-fi.
+
+[![Support this project on Ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/mcalve)
+
 ## What you can do
 
 - Enable or disable domestic hot water (DHW) and adjust its target temperature.
@@ -277,3 +282,13 @@ This license covers the plugin code, not the Ecoforest or ecoGEO trademarks.
 The [Ecoforest ecoGEO integration for Home Assistant by bytestorm](https://github.com/bytestorm/ecoforest_ecogeo)
 was consulted as a reference when researching communication with easyNet.
 It is a separate project for Home Assistant, not a dependency of this Homebridge plugin.
+
+## Support the project
+
+**Keeping your home comfortable? Buy me a coffee!**
+
+If this plugin makes your ecoGEO a little smarter, consider supporting its
+development with a donation on [Ko-fi](https://ko-fi.com/mcalve).
+Donations are entirely optional and always appreciated. Thank you for your support!
+
+[![Support this project on Ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/mcalve)
