@@ -1,0 +1,14 @@
+README.md
+  h_cbbd59f4334615 12-16,285-294
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.6",
+  "base_commit_sha": "7063c7345dc485cecce6eb8d215c2dca728fb354",
+  "prompts": {},
+  "humans": {
+    "h_cbbd59f4334615": {
+      "author": "Martín Calvete Iglesias <mcalvete@users.noreply.github.com>"
+    }
+  }
+}
